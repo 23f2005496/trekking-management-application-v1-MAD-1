@@ -1,0 +1,11 @@
+Flask
+Flask-Login
+Flask-Migrate
+Flask-SQLAlchemy
+Flask-WTF
+pytz
+Jinja2
+email_validator
+python-dotenv
+Werkzeug
+WTForms
