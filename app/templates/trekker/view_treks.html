@@ -1,0 +1,91 @@
+{% extends "layout.html" %}
+{% block title %}All Treks{% endblock %}
+{% block content %}
+<h1 class="page-title">All Treks</h1>
+
+<div class="card">
+    <div class="card-body">
+        <form method="GET">
+            <div class="form-group">
+                <label for="location" class="form-label">Search Location</label>
+                <input class="form-control" type="text" name="location" placeholder="Search by Location"
+                    value="{{ location }}">
+
+            </div>
+            <div class="form-group">
+                <label for="difficulty" class="form-label">Select Difficulty</label>
+                <select id="trek_id" name="difficulty" class="form-control">
+
+                    <option value="">All</option>
+
+                    <option value="Easy" {% if difficulty=="Easy" %} selected {% endif %}>
+                        Easy
+                    </option>
+
+                    <option value="Moderate" {% if difficulty=="Moderate" %} selected {% endif %}>
+                        Moderate
+                    </option>
+
+                    <option value="Hard" {% if difficulty=="Hard" %} selected {% endif %}>
+                        Hard
+                    </option>
+
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Filter Treks</button>
+        </form>
+    </div>
+</div>
+
+
+<section class="mb-6">
+    <div class="card">
+        <div class="card-body">
+
+            <div class="trek-container">
+
+                {% for trek in treks %}
+
+                <div class="trek-card">
+
+                    <div>
+                        {% if trek.image %}
+                        <img src="{{ url_for('static', filename='images/' + trek.image) }}" alt="Loading Image..."
+                            class="trek-image">
+                        {% else %}
+                        <img src="{{ url_for('static', filename='images/no_image.jpg') }}" alt="Loading Image..."
+                            class="trek-image">
+                        {% endif %}
+                    </div>
+
+
+                    <div class="trek-body">
+
+                        <h2>{{ trek.name }}</h2>
+
+                        <p class="text-gray mt-2 mb-2">{{ trek.location }}</p>
+
+                        <div class="d-flex gap-16 align-items-center">
+                            <p><strong>{{ trek.difficulty }}</strong> • {{ trek.duration }}</p>
+                            <p><span class="badge {{ trek.status.lower() }}">{{ trek.status }}</span></p>
+                        </div>
+
+                        <p>Available Slots: <strong>{{ trek.slots }}</strong></p>
+
+                        <a href="{{ url_for('trekker.trek_details', trek_id=trek.id) }}"
+                            class="btn btn-outline-info d-block btn-md">
+                            View Details
+                        </a>
+
+                    </div>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+
+</section>
+{% endblock %}

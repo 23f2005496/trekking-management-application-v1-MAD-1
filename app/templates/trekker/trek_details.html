@@ -1,0 +1,114 @@
+{% extends "layout.html" %}
+{% block title %}{{ trek.name }} Trek{% endblock %}
+{% block content %}
+<h1 class="page-title">Trek Details</h1>
+
+<section class="mb-6">
+    <div class="row gap-6">
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    {% if booking.status in ['Booked', 'Completed'] %}
+
+                    <a href="{{ url_for('trekker.my_bookings') }}"><i class="fa-solid fa-arrow-left"></i> Back to
+                        Bookings</a>
+
+                    {% else %}
+
+                    <a href="{{ url_for('trekker.view_treks') }}"><i class="fa-solid fa-arrow-left"></i> Back to
+                        Treks</a>
+
+                    {% endif %}
+                    <h1 class="mb-1 text-center">{{ trek.name }}</h1>
+                    <div class="row gap-16 mt-6">
+                        <div>
+                            {% if trek.image %}
+                            <img src="{{ url_for('static', filename='images/' + trek.image) }}" class="image"
+                                alt="Loading Image...">
+                            {% else %}
+                            <img src="{{ url_for('static', filename='images/no_image.jpg') }}" class="image"
+                                alt="Loading Image...">
+                            {% endif %}
+                        </div>
+                        <div>
+
+                            <div class="detail-item">
+                                <span class="detail-key">Location :</span>
+                                <span class="detail-value ml-6">{{ trek.location }}</span>
+                            </div>
+
+                            <div class="detail-item">
+                                <span class="detail-key">Difficulty :</span>
+                                <span class="detail-value ml-6">{{ trek.difficulty }}</span>
+                            </div>
+
+                            <div class="detail-item">
+                                <span class="detail-key">Duration :</span>
+                                <span class="detail-value ml-6">{{ trek.duration }}</span>
+                            </div>
+
+                            <div class="detail-item">
+                                <span class="detail-key">Available Slots :</span>
+                                <span class="detail-value ml-6">{{ trek.slots }}</span>
+                            </div>
+
+                            <div class="detail-item">
+                                <span class="detail-key">Start Date :</span>
+                                <span class="detail-value ml-6">{{ trek.start_date.strftime('%d %b %Y') }}</span>
+                            </div>
+
+                            <div class="detail-item">
+                                <span class="detail-key">End Date :</span>
+                                <span class="detail-value ml-6">{{ trek.end_date.strftime('%d %b %Y') }}</span>
+                            </div>
+
+                            <div class="detail-item">
+                                <span class="detail-key">Assigned Staff :</span>
+                                <span class="detail-value ml-6">{{ trek.staff.full_name if trek.staff else 'Not
+                                    Assigned' }}</span>
+                            </div>
+
+
+                            <div class="d-flex justify-content-end gap-4 mt-10">
+
+                                {% if trek.status == 'Open' %}
+
+                                {% if booking.status == 'Booked' %}
+
+                                <form action="{{ url_for('trekker.cancel_booking', booking_id=booking.id) }}"
+                                    method="POST">
+                                    <button class="btn btn-outline-danger btn-md"
+                                        onclick="return confirm('Are you sure, you want to cancel this booking?')">Cancel
+                                        Booking</button>
+                                </form>
+
+                                {% else %}
+
+                                <form action="{{ url_for('trekker.book_trek', trek_id=trek.id) }}" method="POST">
+                                    <button class="btn btn-info-light btn-md"
+                                        onclick="return confirm('Are you sure, you want to book this trek?')">Book
+                                        Now
+                                    </button>
+                                </form>
+
+                                {% endif %}
+
+                                {% else %}
+                                <span class="badge {{trek.status|lower}}">{{trek.status}}</span>
+                                {% endif %}
+
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+
+
+{% endblock %}

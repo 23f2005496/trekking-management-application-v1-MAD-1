@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+{% block title %}My Bookings{% endblock %}
+{% block content %}
+<h1 class="page-title">My Bookings</h1>
+
+<section class="mb-6">
+    <div class="card">
+        <div class="card-body">
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Trek Name</th>
+                            <th>Location</th>
+                            <th>Duration</th>
+                            <th>Trek Dates</th>
+                            <th>Booking Status</th>
+                            <th>Booking Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for booking in my_bookings %}
+                        <tr>
+                            <td>{{ booking.trek.name }}</td>
+                            <td>{{ booking.trek.location }}</td>
+                            <td>{{ booking.trek.duration }}</td>
+                            <td>{{ booking.trek.start_date.strftime('%d %b') }} - {{ booking.trek.end_date.strftime('%d
+                                %b %Y') }}</td>
+                            <td>
+                                <span class="badge {{booking.status|lower}}">{{booking.status}}</span>
+                            </td>
+                            <td>{{ booking.booking_date.strftime('%d %b %Y, %I:%M %p') }}</td>
+                            <td class="action-buttons">
+                                <a href="{{ url_for('trekker.trek_details', trek_id=booking.trek.id) }}"
+                                    class="btn btn-outline-info btn-md">View Details</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+{% endblock %}

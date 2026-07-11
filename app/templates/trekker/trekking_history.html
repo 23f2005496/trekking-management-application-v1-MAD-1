@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+{% block title %}Trekking History{% endblock %}
+{% block content %}
+<h1 class="page-title">Trekking History</h1>
+
+<form method="GET">
+    <table class="table">
+        <tr>
+            <td>Search Treks:</td>
+            <td>
+                <input class="form-control" type="text" name="query" placeholder="Search by Name" value="{{ query }}">
+            </td>
+            <td>
+                <button class="btn btn-primary" type="submit">Search</button>
+            </td>
+        </tr>
+    </table>
+</form>
+
+<section class="mb-6">
+    <div class="card">
+        <div class="card-body">
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Trek Name</th>
+                            <th>Location</th>
+                            <th>Difficulty</th>
+                            <th>Duration</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Status</th>
+                            <th>Assigned Staff</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for trek in trekking_history %}
+                        <tr>
+                            <td>{{ trek.name }}</td>
+                            <td>{{ trek.location }}</td>
+                            <td>{{ trek.difficulty }}</td>
+                            <td>{{ trek.duration }}</td>
+                            <td>{{ trek.start_date.strftime('%d %b %Y') }}</td>
+                            <td>{{ trek.end_date.strftime('%d %b %Y') }}</td>
+                            <td>
+                                <span class="badge {{trek.status|lower}}">{{trek.status}}</span>
+                            </td>
+                            <td>{{ trek.staff.full_name }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+{% endblock %}
