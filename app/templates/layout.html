@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block head %}
+    <title>{% block title %}{% endblock %} - Trekking Management Application</title>
+    {% endblock %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/quiz.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="{{ url_for('home') }}" class="navbar-brand"><i class="fa-solid fa-person-hiking"></i> Trekking
+            Management Application</a>
+        <ul class="navbar-nav">
+            {% if current_user.is_authenticated %}
+            <li class="nav-item"><i class="fa-regular fa-user"></i> {{ current_user.full_name }}</li>
+            <li class="nav-item"><a href="{{ url_for('auth.logout') }}" class="nav-link"><i
+                        class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a></li>
+            {% else %}
+            <li class="nav-item"><a href="{{ url_for('auth.login') }}" class="nav-link">Login</a></li>
+            <li class="nav-item"><a href="{{ url_for('auth.register') }}" class="nav-link">Register</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <!-- Left Drawer -->
+    {% if current_user.is_authenticated %}
+    <aside class="drawer">
+        {% if current_user.role == "admin" %}
+        <a href="{{ url_for('admin.admin_dashboard') }}" class="nav-link"><i class="fa-solid fa-chart-simple"></i>
+            Dashboard</a>
+        <a href="{{ url_for('admin.manage_treks') }}" class="nav-link"><i class="fa-solid fa-mountain-sun"></i>
+            Treks</a>
+        <a href="{{ url_for('admin.manage_staff', status='Pending') }}" class="nav-link"><i
+                class="fa-solid fa-user-group"></i> Staff</a>
+        <a href="{{ url_for('admin.all_bookings') }}" class="nav-link"><i class="fa-regular fa-calendar"></i>
+            Bookings</a>
+        <a href="{{ url_for('admin.trekking_history') }}" class="nav-link"><i class="fa-solid fa-chart-column"></i>
+            Trekking History</a>
+        <a href="{{ url_for('admin.manage_users') }}" class="nav-link"><i class="fa-solid fa-users"></i> Manage
+            Users</a>
+        {% elif current_user.role == "staff" %}
+        <a href="{{ url_for('staff.staff_dashboard') }}" class="nav-link"><i class="fa-solid fa-chart-simple"></i>
+            Dashboard</a>
+        <a href="{{ url_for('staff.assigned_treks') }}" class="nav-link"><i class="fa-solid fa-mountain-sun"></i>
+            Assigned Treks</a>
+        <a href="{{ url_for('staff.trekking_history') }}" class="nav-link"><i class="fa-solid fa-chart-column"></i>
+            Trekking History</a>
+        <a href="{{ url_for('staff.my_profile') }}" class="nav-link"><i class="fa-solid fa-user-pen"></i> My Profile</a>
+        <a href="{{ url_for('staff.change_password') }}" class="nav-link"><i class="fa-solid fa-key"></i> Change
+            Password</a>
+        {% else %}
+        <a href="{{ url_for('trekker.trekker_dashboard') }}" class="nav-link"><i class="fa-solid fa-chart-simple"></i>
+            Dashboard</a>
+        <a href="{{ url_for('trekker.view_treks') }}" class="nav-link"><i class="fa-solid fa-mountain-sun"></i> View
+            Treks</a>
+        <a href="{{ url_for('trekker.my_bookings') }}" class="nav-link"><i class="fa-regular fa-calendar"></i> My
+            Bookings</a>
+        <a href="{{ url_for('trekker.trekking_history') }}" class="nav-link"><i class="fa-solid fa-chart-column"></i>
+            Trekking History</a>
+        <a href="{{ url_for('trekker.my_profile') }}" class="nav-link"><i class="fa-solid fa-user-pen"></i> My
+            Profile</a>
+        <a href="{{ url_for('trekker.change_password') }}" class="nav-link"><i class="fa-solid fa-key"></i> Change
+            Password</a>
+        {% endif %}
+    </aside>
+    {% endif %}
+
+    <!-- Main Content -->
+    <main class="main-content">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+        <!-- Page Content -->
+        <div class="container">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+</body>
+
+</html>
