@@ -1,0 +1,103 @@
+{% extends "layout.html" %}
+{% block title %}Staff Dashboard{% endblock %}
+{% block content %}
+<h1 class="page-title">Welcome, Staff!</h1>
+
+<section class="mb-6">
+    <div class="card">
+        <div class="card-body">
+            <h2 class="mb-3">Treks Summary</h2>
+            <div class="row gap-6">
+
+                <div class="col">
+                    <div class="card bg-gray">
+                        <div class="card-body">
+                            <h3 class="mb-3">Total Assigned Treks</h3>
+                            <div class="detail-item gap-12">
+                                <h1 class="detail-key">{{ total_assigned_treks }}</h1>
+                                <h1 class="detail-value"><i class="fa-solid fa-mountain-sun"></i></h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card bg-gray">
+                        <div class="card-body">
+                            <h3 class="mb-3">Completed Treks</h3>
+                            <div class="detail-item gap-12">
+                                <h1 class="detail-key">{{ completed_treks }}</h1>
+                                <h1 class="detail-value"><i class="fa-solid fa-calendar-check"></i></h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card bg-gray">
+                        <div class="card-body">
+                            <h3 class="mb-3">Upcoming Treks</h3>
+                            <div class="detail-item gap-12">
+                                <h1 class="detail-key">{{ upcoming_treks|length }}</h1>
+                                <h1 class="detail-value"><i class="fa-solid fa-arrow-up-right-dots"></i></h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card bg-gray">
+                        <div class="card-body">
+                            <h3 class="mb-3">Total Participants</h3>
+                            <div class="detail-item gap-12">
+                                <h1 class="detail-key">{{ total_participants }}</h1>
+                                <h1 class="detail-value"><i class="fa-solid fa-person-hiking"></i></h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="mb-6">
+    <div class="card">
+        <div class="card-body">
+            <h2 class="mb-3">Upcoming Treks</h2>
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Trek Name</th>
+                            <th>Location</th>
+                            <th>Difficulty</th>
+                            <th>Duration</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Status</th>
+                            <th>Participants</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for trek in upcoming_treks %}
+                        <tr>
+                            <td>{{ trek.name }}</td>
+                            <td>{{ trek.location }}</td>
+                            <td>{{ trek.difficulty }}</td>
+                            <td>{{ trek.duration }}</td>
+                            <td>{{ trek.start_date.strftime('%d %b %Y') }}</td>
+                            <td>{{ trek.end_date.strftime('%d %b %Y') }}</td>
+                            <td>
+                                <span class="badge {{trek.status|lower}}">{{trek.status}}</span>
+                            </td>
+                            <td>{{ trek_bookings[trek.name] }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+{% endblock %}
