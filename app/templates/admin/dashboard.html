@@ -1,0 +1,112 @@
+{% extends "layout.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block head %}
+{{ super() }}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+{% block content %}
+<h1 class="page-title">Welcome, Admin!</h1>
+
+<section class="mb-6">
+    <div class="row gap-6">
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="mb-3">Statistics & Insights</h2>
+
+                    <div class="row gap-6">
+                        <div class="col">
+                            <div class="card bg-gray">
+                                <div class="card-body">
+                                    <h3 class="mb-3">Total Treks</h3>
+                                    <div class="detail-item gap-12">
+                                        <h1 class="detail-key">{{ total_treks }}</h1>
+                                        <h1 class="detail-value"><i class="fa-solid fa-mountain-sun"></i></h1>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card bg-gray">
+                                <div class="card-body">
+                                    <h3 class="mb-3">Total Staff</h3>
+                                    <div class="detail-item gap-12">
+                                        <h1 class="detail-key">{{ total_staff }}</h1>
+                                        <h1 class="detail-value"><i class="fa-solid fa-user-group"></i></h1>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card bg-gray">
+                                <div class="card-body">
+                                    <h3 class="mb-3">Total Trekkers</h3>
+                                    <div class="detail-item gap-12">
+                                        <h1 class="detail-key">{{ total_trekkers }}</h1>
+                                        <h1 class="detail-value"><i class="fa-solid fa-users"></i></h1>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card bg-gray">
+                                <div class="card-body">
+                                    <h3 class="mb-3">Total Bookings</h3>
+                                    <div class="detail-item gap-12">
+                                        <h1 class="detail-key">{{ total_bookings }}</h1>
+                                        <h1 class="detail-value"><i class="fa-regular fa-calendar"></i></h1>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="mb-3">Treks Status</h2>
+                    <canvas id="trekStatusChart" class="trek-status-chart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<script>
+    const ctx = document.getElementById('trekStatusChart');
+
+    new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: {{ trek_status_data.keys() | list | tojson }},
+        datasets: [{
+            label: 'Trek Count',
+            data: {{ trek_status_data.values() | list | tojson }},
+        backgroundColor: [
+            "#1d4ed8",  //Open 'blue'
+            "#ff0000",  //Closed 'red'
+            "#f97316",  //Ongoing 'accent'
+            "#008000"   //Completed 'green'
+        ],
+        hoverOffset: 5
+                    }]
+            },
+        options: {
+        plugins: {
+            legend: {
+                position: 'top',
+                labels: {
+                    usePointStyle: true,
+                    pointStyle: 'circle',
+                    padding: 20
+                }
+            }
+        }
+    }
+        });
+</script>
+{% endblock %}

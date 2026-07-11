@@ -1,0 +1,65 @@
+{% extends "layout.html" %}
+{% block title %}Manage Treks{% endblock %}
+{% block content %}
+<h1 class="page-title">Manage Treks</h1>
+
+<a href="{{ url_for('admin.add_trek') }}" class="btn btn-primary mb-4"><i class="fa-solid fa-plus"></i> Add New Trek</a>
+
+<form method="GET">
+    <table class="table">
+        <tr>
+            <td>Search Treks:</td>
+            <td>
+                <input class="form-control" type="text" name="query" placeholder="Search by Name" value="{{ query }}">
+            </td>
+            <td>
+                <button class="btn btn-primary" type="submit">Search</button>
+            </td>
+        </tr>
+    </table>
+</form>
+
+<section class="mb-6">
+    <div class="card">
+        <div class="card-body">
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Trek Name</th>
+                            <th>Location</th>
+                            <th>Difficulty</th>
+                            <th>Available Slots</th>
+                            <th>Status</th>
+                            <th>Assigned Staff</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for trek in treks %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ trek.name }}</td>
+                            <td>{{ trek.location }}</td>
+                            <td>{{ trek.difficulty }}</td>
+                            <td>{{ trek.slots }}</td>
+                            <td>
+                                <span class="badge {{trek.status|lower}}">{{trek.status}}</span>
+                            </td>
+                            <td>{{ trek.staff.full_name if trek.staff else 'Not Assigned' }}</td>
+                            <td class="action-buttons">
+                                <a href="{{ url_for('admin.trek_details', trek_id=trek.id) }}"
+                                    class="btn btn-outline-info btn-md">Manage</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+{% endblock %}

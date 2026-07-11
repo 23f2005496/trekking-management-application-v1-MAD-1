@@ -1,0 +1,70 @@
+{% extends "layout.html" %}
+{% block title %}Assign Staff for {{ trek.name }}{% endblock %}
+{% block content %}
+<h1 class="page-title">Assign Staff for {{ trek.name }}</h1>
+
+<a href="{{ url_for('admin.trek_details', trek_id=trek.id) }}" class="btn btn-outline-primary mb-4">Back</a>
+
+<form method="GET">
+    <table class="table">
+        <tr>
+            <td>Search Staff:</td>
+            <td>
+                <input class="form-control" type="text" name="query" placeholder="Search by Name" value="{{ query }}">
+            </td>
+            <td>
+                <button class="btn btn-primary" type="submit">Search</button>
+            </td>
+        </tr>
+    </table>
+</form>
+
+<section class="mb-6">
+    <div class="card">
+        <div class="card-body">
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Staff ID</th>
+                            <th>Full Name</th>
+                            <th>Email</th>
+                            <th>Contact</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for staff in approved_staff %}
+                        <tr>
+                            <td>S00{{ staff.id }}</td>
+                            <td>{{ staff.full_name }}</td>
+                            <td>{{ staff.email }}</td>
+                            <td>{{ staff.contact }}</td>
+                            <td class="action-buttons">
+                                {% if trek.assigned_staff_id == staff.id %}
+                                <form
+                                    action="{{ url_for('admin.confirm_remove_staff', trek_id=trek.id, staff_id=staff.id) }}"
+                                    method="post">
+                                    <button class="btn btn-danger btn-sm"
+                                        onclick="return confirm('Are you sure, you want to remove this staff?')">Remove</button>
+                                </form>
+                                {% else %}
+                                <form
+                                    action="{{ url_for('admin.confirm_assign_staff', trek_id=trek.id, staff_id=staff.id) }}"
+                                    method="post">
+                                    <button class="btn btn-info btn-sm"
+                                        onclick="return confirm('Are you sure, you want to assign this staff?')">Assign</button>
+                                </form>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+{% endblock %}

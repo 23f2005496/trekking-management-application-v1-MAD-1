@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+{% block title %}All Bookings{% endblock %}
+{% block content %}
+<h1 class="page-title">All Bookings</h1>
+
+<section class="mb-6">
+    <div class="card">
+        <div class="card-body">
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Booking ID</th>
+                            <th>Trekker</th>
+                            <th>Trek</th>
+                            <th>Booking Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for booking in all_bookings %}
+                        <tr>
+                            <td>B00{{ loop.index }}</td>
+                            <td>{{ booking.user.full_name }}</td>
+                            <td>{{ booking.trek.name }}</td>
+                            <td>{{ booking.booking_date.strftime('%d %b %Y, %I:%M %p') }}</td>
+                            <td>
+                                <span class="badge {{booking.status|lower}}">{{booking.status}}</span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+{% endblock %}

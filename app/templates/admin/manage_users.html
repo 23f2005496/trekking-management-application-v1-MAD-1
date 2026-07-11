@@ -1,0 +1,79 @@
+{% extends "layout.html" %}
+{% block title %}Manage Users{% endblock %}
+{% block content %}
+<h1 class="page-title">All Users</h1>
+
+<form method="GET">
+    <table class="table">
+        <tr>
+            <td>Search Users:</td>
+            <td>
+                <input class="form-control" type="text" name="query" placeholder="Search by Name" value="{{ query }}">
+            </td>
+            <td>
+                <button class="btn btn-primary" type="submit">Search</button>
+            </td>
+        </tr>
+    </table>
+</form>
+
+<section class="mb-6">
+    <div class="card">
+        <div class="card-body">
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>User ID</th>
+                            <th>Full Name</th>
+                            <th>Email</th>
+                            <th>Contact</th>
+                            <th>Status</th>
+                            <th>Role</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td>U00{{ user.id }}</td>
+                            <td>{{ user.full_name }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.contact }}</td>
+                            <td>
+                                <span class="badge {{user.status|lower}}">{{user.status}}</span>
+                            </td>
+                            <td>{{ user.role }}</td>
+                            <td class="action-buttons">
+                                {% if user.role != "admin" %}
+                                {% if user.status == "Blacklisted" %}
+                                <form
+                                    action="{{ url_for('admin.change_user_status', user_id=user.id, status='Active') }}"
+                                    method="POST">
+                                    <button class="btn btn-success btn-sm"
+                                        onclick="return confirm('Are you sure, you want to activate this user?')">Activate</button>
+                                </form>
+                                {% else %}
+                                <form
+                                    action="{{ url_for('admin.change_user_status', user_id=user.id, status='Blacklisted') }}"
+                                    method="POST">
+                                    <button class="btn btn-danger btn-sm"
+                                        onclick="return confirm('Are you sure, you want to blacklist this user?')">Blacklist</button>
+                                </form>
+                                {% endif %}
+
+                                {% else %}
+                                None
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+{% endblock %}

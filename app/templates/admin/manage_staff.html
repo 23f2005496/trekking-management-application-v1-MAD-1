@@ -1,0 +1,133 @@
+{% extends "layout.html" %}
+{% block title %}Manage Staff{% endblock %}
+{% block content %}
+<h1 class="page-title">Staff Requests</h1>
+
+<form method="GET">
+    <table class="table">
+        <tr>
+            <td>Search Staff:</td>
+            <td>
+                <input class="form-control" type="text" name="query" placeholder="Search by Name" value="{{ query }}">
+            </td>
+            <td>
+                <button class="btn btn-primary" type="submit">Search</button>
+            </td>
+        </tr>
+    </table>
+</form>
+
+
+<section class="mb-6">
+    <div class="card">
+        <div class="card-body">
+            <div class="d-flex gap-4 mb-6">
+                <a href="{{ url_for('admin.manage_staff', status='Pending') }}"
+                    class="btn {% if status == 'Pending' %}btn-info{% else %}btn-outline-info{% endif %} btn-md">Pending
+                    ({{pending_staff_list|length}})</a>
+                <a href="{{ url_for('admin.manage_staff', status='Approved') }}"
+                    class="btn {% if status == 'Approved' %}btn-success{% else %}btn-outline-success{% endif %} btn-md">Approved
+                    ({{approved_staff_list|length}})</a>
+                <a href="{{ url_for('admin.manage_staff', status='Rejected') }}"
+                    class="btn {% if status == 'Rejected' %}btn-danger{% else %}btn-outline-danger{% endif %} btn-md">Rejected
+                    ({{rejected_staff_list|length}})</a>
+            </div>
+
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Staff ID</th>
+                            <th>Full Name</th>
+                            <th>Email</th>
+                            <th>Contact</th>
+                            <th>Status</th>
+                            <th colspan="2">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if status=='Approved' %}
+                        {% for staff in approved_staff_list %}
+                        <tr>
+                            <td>S00{{ staff.id }}</td>
+                            <td>{{ staff.full_name }}</td>
+                            <td>{{ staff.email }}</td>
+                            <td>{{ staff.contact }}</td>
+                            <td>{{ staff.status }}</td>
+                            <td colspan="2" class="action-buttons">
+                                <form
+                                    action="{{ url_for('admin.change_staff_status', staff_id=staff.id, status='Pending') }}"
+                                    method="POST">
+                                    <button class="btn btn-info btn-sm"
+                                        onclick="return confirm('Are you sure, you want to approve this staff?')">Pending</button>
+                                </form>
+                                <form
+                                    action="{{ url_for('admin.change_staff_status', staff_id=staff.id, status='Rejected') }}"
+                                    method="POST">
+                                    <button class="btn btn-danger btn-sm"
+                                        onclick="return confirm('Are you sure, you want to reject this staff?')">Reject</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+
+                        {% elif status=='Rejected' %}
+                        {% for staff in rejected_staff_list %}
+                        <tr>
+                            <td>S00{{ staff.id }}</td>
+                            <td>{{ staff.full_name }}</td>
+                            <td>{{ staff.email }}</td>
+                            <td>{{ staff.contact }}</td>
+                            <td>{{ staff.status }}</td>
+                            <td colspan="2" class="action-buttons">
+                                <form
+                                    action="{{ url_for('admin.change_staff_status', staff_id=staff.id, status='Pending') }}"
+                                    method="POST">
+                                    <button class="btn btn-info btn-sm"
+                                        onclick="return confirm('Are you sure, you want to approve this staff?')">Pending</button>
+                                </form>
+                                <form
+                                    action="{{ url_for('admin.change_staff_status', staff_id=staff.id, status='Approved') }}"
+                                    method="POST">
+                                    <button class="btn btn-success btn-sm"
+                                        onclick="return confirm('Are you sure, you want to approve this staff?')">Approve</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+
+                        {% else %}
+                        {% for staff in pending_staff_list %}
+                        <tr>
+                            <td>S00{{ staff.id }}</td>
+                            <td>{{ staff.full_name }}</td>
+                            <td>{{ staff.email }}</td>
+                            <td>{{ staff.contact }}</td>
+                            <td>{{ staff.status }}</td>
+                            <td colspan="2" class="action-buttons">
+                                <form
+                                    action="{{ url_for('admin.change_staff_status', staff_id=staff.id, status='Approved') }}"
+                                    method="POST">
+                                    <button class="btn btn-success btn-sm"
+                                        onclick="return confirm('Are you sure, you want to approve this staff?')">Approve</button>
+                                </form>
+                                <form
+                                    action="{{ url_for('admin.change_staff_status', staff_id=staff.id, status='Rejected') }}"
+                                    method="POST">
+                                    <button class="btn btn-danger btn-sm"
+                                        onclick="return confirm('Are you sure, you want to reject this staff?')">Reject</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+{% endblock %}

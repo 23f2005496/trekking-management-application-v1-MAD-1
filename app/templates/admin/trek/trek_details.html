@@ -1,0 +1,110 @@
+{% extends "layout.html" %}
+{% block title %}{{ trek.name }}{% endblock %}
+{% block content %}
+<h1 class="page-title">Trek Details</h1>
+
+<section class="mb-6">
+    <div class="row gap-6">
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    {% if trek.status != 'Completed' %}
+
+                    <a href="{{ url_for('admin.manage_treks') }}"><i class="fa-solid fa-arrow-left"></i> Back to
+                        Treks</a>
+
+                    {% else %}
+
+                    <a href="{{ url_for('admin.trekking_history') }}"><i class="fa-solid fa-arrow-left"></i> Back to
+                        History</a>
+
+                    {% endif %}
+                    <h1 class="mb-1 text-center">{{ trek.name }}</h1>
+                    <div class="row gap-16 mt-6">
+                        <div>
+                            {%if trek.image %}
+                            <img src="{{ url_for('static', filename='images/' + trek.image) }}" class="image"
+                                alt="Loading Image...">
+                            {% else %}
+                            <img src="{{ url_for('static', filename='images/no_image.jpg') }}" class="image"
+                                alt="Loading Image...">
+                            {% endif %}
+                        </div>
+                        <div>
+
+                            <div class="detail-item">
+                                <span class="detail-key">Location :</span>
+                                <span class="detail-value ml-6">{{ trek.location }}</span>
+                            </div>
+
+                            <div class="detail-item">
+                                <span class="detail-key">Difficulty :</span>
+                                <span class="detail-value ml-6">{{ trek.difficulty }}</span>
+                            </div>
+
+                            <div class="detail-item">
+                                <span class="detail-key">Duration :</span>
+                                <span class="detail-value ml-6">{{ trek.duration }}</span>
+                            </div>
+
+                            <div class="detail-item">
+                                <span class="detail-key">Available Slots :</span>
+                                <span class="detail-value ml-6">{{ trek.slots }}</span>
+                            </div>
+
+                            <div class="detail-item">
+                                <span class="detail-key">Start Date :</span>
+                                <span class="detail-value ml-6">{{ trek.start_date.strftime('%d %b %Y') }}</span>
+                            </div>
+
+                            <div class="detail-item">
+                                <span class="detail-key">End Date :</span>
+                                <span class="detail-value ml-6">{{ trek.end_date.strftime('%d %b %Y') }}</span>
+                            </div>
+
+                            <div class="detail-item">
+                                <span class="detail-key">Assigned Staff :</span>
+                                <span class="detail-value ml-6">{{ trek.staff.full_name if trek.staff else 'Not
+                                    Assigned' }}</span>
+                            </div>
+
+                            <div class="detail-item">
+                                <span class="detail-key">Participants :</span>
+                                <span class="detail-value ml-6">{{ participants }}</span>
+                            </div>
+
+
+                            <div class="d-flex justify-content-center gap-4 mt-6">
+
+                                {% if trek.status != 'Completed' %}
+
+                                <a href="{{ url_for('admin.edit_trek', id=trek.id) }}" class="btn btn-info btn-md">Edit
+                                    <i class="fa-regular fa-pen-to-square"></i></a>
+                                <form action="{{ url_for('admin.delete_trek', id=trek.id) }}" method="post">
+                                    <button class="btn btn-danger btn-md"
+                                        onclick="return confirm('Are you sure, you want to delete this trek?')">Delete
+                                        <i class="fa-regular fa-trash-can"></i></button>
+                                </form>
+                                <a href="{{ url_for('admin.assign_staff', trek_id=trek.id) }}"
+                                    class="btn btn-success btn-md">
+                                    Assign Staff <i class="fa-regular fa-user"></i>
+                                </a>
+
+                                {% else %}
+                                <span class="badge {{trek.status|lower}}">{{trek.status}}</span>
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+
+
+{% endblock %}
